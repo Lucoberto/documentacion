@@ -1,0 +1,26 @@
+Crear branch nueva
+# git switch -c newbranch
+
+Cambiar entre branchs
+# git switch newbranch
+
+Mover modificaciones de una rama a otra
+# git merge newbranch
+NOTA: Tienes que estar en la rama en la que quieres volcar los datos
+
+Modificar una de las versiones
+# git checkout 12e5a768d
+NOTA: El codigo lo ves con git log
+
+Ver el estado del codigo
+# git status
+
+Pasar el codigo al estado de hacer commit
+# git add index.php
+NOTA: Tambien puedes poner un "." para añadir todo
+
+"Guardar" = commitear el codigo
+# git commit -m "Version 1 index.php"
+NOTA: Pon de manera clara lo que estas commiteando
+    ya que luego no sabras que es al hacer git log
+
