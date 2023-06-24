@@ -1,0 +1,29 @@
+version: '2'
+
+# Crea una network
+networks:
+  testnetwork:
+
+# Definir los servicios "contenedores"
+services:
+# Nombre del servicio
+  ubuntuone:
+# Imagen de la que vamos a partir
+    image: "ubuntu:latest"
+# Asignamos puertos
+    ports:
+      - 8080:80
+# Lo conectamos a la red
+    networks:
+      - testnetwork
+
+  ubuntutwo:
+# Instenta montal el docker file
+    build: ./
+    ports:
+      - 9580:80
+    networks:
+      testnetwork:
+# El nombre por el que se encontrara dentro de la red
+        aliases:
+          - pako

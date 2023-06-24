@@ -1,0 +1,20 @@
+# Imagen base
+FROM ubuntu:latest
+
+# Con run conseguimos que durante la instalacion docker lanze conados.
+RUN mkdir -p /work/{python , stylepy}
+# Le asignamos cual sera el directorio donde debe iniciar
+WORKDIR /work/
+
+# Copia de archivos de la maquina host al contenedor
+COPY docker-doc.md /work/
+COPY deploy.sh /work/
+
+# Le decimos que se mueva al directorio donde esta la APP
+RUN cd /work/proxmox-autodeploy
+
+# Decimos que exponga el puerto 9080
+EXPOSE 9080
+
+# Es lo que arranca segun startea el contenedor
+CMD ["bash","deploy.sh"]
