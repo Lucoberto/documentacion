@@ -1,0 +1,30 @@
+---
+# Version del fichero
+apiVersion: v1
+
+# Tipo de deploy
+kind: Pod
+
+# Informacion sobre la applicacion
+metadata:
+  name: lit
+  labels:
+    app: web
+
+# Especificaciones de la aplicacion
+spec:
+# Contenedores que vamos a desplegar
+  containers:
+# Nombre de contenedor
+    - name: ngi
+# Imagen que vamos a utilizar
+      image: nginx
+# Puertos que abrimos 
+      ports:
+        - containerPort: 80
+    
+    - name: ubuntuk
+      image: ubuntu:latest
+      command: ["/bin/sh"]
+# Se hace un bucle para evitar que muera el contenedor
+      args: ["-c", "while true; do echo hello; sleep 10; done"]

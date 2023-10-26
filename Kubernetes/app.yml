@@ -1,0 +1,27 @@
+---
+# Version del fichero
+apiVersion: v1
+
+# Tipo de deploy
+kind: Pod
+
+# Informacion sobre la applicacion
+metadata:
+  name: pako
+  labels:
+    app: web
+
+# Especificaciones de la aplicacion
+spec:
+# Contenedores que vamos a desplegar
+  containers:
+# Nombre de contenedor
+    - name: ngi
+# Imagen que vamos a utilizar
+      image: nginx
+# Puertos que abrimos 
+      ports:
+        - containerPort: 80
+    
+    - name: mys
+      image: mysql
