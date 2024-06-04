@@ -508,3 +508,84 @@ WHERE admissions.diagnosis LIKE 'A%' AND patients.weight BETWEEN 90 AnD 100
 GROUP BY ( patients.first_name)
 ORDER BY ( patients.weight ) DESC;
 ```
+
+```sql
+
+CREATE DATABASES liburutegia;
+
+USE liburutegia;
+
+CREATE TABLE idazleak (
+idazle_nan CHAR(8) NOT NULL, 
+izena VARCHAR(50) NOT NULL, 
+abizena VARCHAR(50) NOT NULL, 
+helbidea VARCHAR(80) NOT NULL, 
+herria VARCHAR(35) NOT NULL, 
+telefonoa VARCHAR(9) NOT NULL, 
+adina INT NOT NULL, 
+sariak VARCHAR(60) NOT NULL, 
+soldata INT NOT NULL,
+PRIMARY KEY (idazle_nan));
+
+CREATE TABLE liburuak (
+liburu_kodea INT AUTO_INCREMENT NOT NULL,
+izenburua VARCHAR(80) NOT NULL,
+prezioa INT NOT NULL,
+euskeraz_idatzita CHAR(3) NOT NULL,
+argital_kodea CHAR(2) NOT NULL,
+nan CHAR(8) NOT NULL,
+PRIMARY KEY (liburu_kodea),
+FOREIGN KEY (nan) REFERENCES idazleak(idazle_nan));
+
+INSERT INTO idazleak (izena, abizena, helbidea, herria, telefonoa, adina, sariak, soldata) VALUES
+('724353216', 'Bernardo', 'Atxaga', 'Nagusia 6, 3.A', 'Tolosa', '943671520', 45, 'Donostiko saria', 2400),
+('78453235', 'Graharn', 'Greene', 'Man street 15', 'Londres', '917564378', 67, 'Londreseko saria', 3100);
+
+INSER INTO liburuak (izenburua, prezioa, euskeraz_idatzita, argital_kodea, nan) VALUES
+('Ababakoak', 18, 'BAI', '1', '724353216'),
+('El tren de estambul', 12, 'EZ', '2', '78453235'),
+('El factor humano', 18, 'EZ', '2', '78453235'),
+('Soinujolearen semea', 9, 'BAI', '1', '724353216');
+
+-- Coge el sueldo mas alto que la media
+
+SELECT * FROM idazleak WHERE soldata > (
+SELECT AVG(soldata) FROM idazleak);
+
+-- Coge la media de edad de todos los escritores
+
+SELECT AVG(adina) AS media_de_edad FROM idazleak;
+
+-- Selecciona la cantidad de libros por precios
+
+SELECT prezioa, COUNT(*) AS Liburuak FROM liburuak GROUP BY (prezioa);
+
+-- Borra todos los libros que no esten escritos en euskera
+
+DELETE * FROM liburuak WHERE euskeraz_idatzia = 'EZ';
+
+-- Coge informacion de los autores y los libros que ha escrito
+
+SELECT idazleak.*, liburuak.izenburua 
+FROM idazleak INNER JOIN liburuak ON idazleak.idazle_nan = liburuak.nan;
+
+-- Crear dos usuarios con diferentes permisos
+
+CREATE USER koldo@localhost IDENTIFIED BY 'koldo';
+
+GRANT ALL PRIVILEGES ON *.* TO koldo@localhost;
+
+FLUSH PRIVILEGES;
+
+CREATE USER miren@localhost IDENTIFIED BY 'miren';
+
+GRANT DELETE, UPDATE ON *.* TO miren@localhost;
+
+FLUSH PRIVILEGES;
+
+-- Crea un punto de vista en el que aparezca informacion del escritor
+
+CREATE VIEW kon_ikuspegia_idazleak AS
+SELECT idazle_nan, izena, abizena 
+FROM idazleak; 
+```
