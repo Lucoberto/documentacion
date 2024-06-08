@@ -1,0 +1,19 @@
+version: 2.1
+# Los jobs son tareas que se ejecutan cuando son llamadas
+jobs:
+  # Nombre de la tarea
+  saluda:
+    # El entorno donde se ejecuta
+    docker:
+      # Se pueden usar imagenes de DockerHub aunque esto puede consumir mas creditos 
+      - image: ubuntu:latest
+    # Los pasos que va a ejecutar
+    steps:
+      - run: echo hello
+
+workflows:
+  newimage:
+    jobs:
+      - saluda:
+          # Le podemos dar nombre al job usando la palabra reservada name:
+          name: hello

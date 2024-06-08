@@ -1,0 +1,59 @@
+version: 2.1
+parameters:
+  # Nombre del parametro
+  nombre:
+    # Tipo de parametro
+    type: string
+    # Valor por defecto
+    default: log
+
+# Los jobs son tareas que se ejecutan cuando son llamadas
+jobs:
+  # Nombre de la tarea
+  saluda:
+    # El entorno donde se ejecuta
+    docker:
+      # La imagen donde ejecuta los pasos
+      - image: cimg/base:stable
+    # Los pasos que va a ejecutar
+    steps:
+      # Es pipeline.parameters ya que es un parametro definido en el pipeline se define '<<>>'
+      - run: echo hello << pipeline.parameters.nombre >>
+
+  # Se pueden definir varias tareas
+  despidete:
+    docker:
+      - image: cimg/base:stable
+    steps:
+      # Se pueden ejecutar varios pasos
+      - run: echo adios
+      - run: echo adios de verdad
+
+  # Parametros a nivel de Job
+  helloname:
+    parameters:
+      newname:
+        type: string
+        default: pako
+    docker:
+      - image: cimg/base:stable
+    steps:
+      # Como es un parametro a nivel de job solo se pone parameters
+      - run: echo hello << parameters.newname >>
+
+workflows:
+  paramworkflow:
+    jobs:
+      - helloname:
+          # Le podemos dar nombre al job usando la palabra reservada name:
+          name: hello
+      - saluda
+      - despidete:
+          requires:
+            - hello
+            - saluda
+
+  parametersworkflow:
+    jobs:
+      - helloname:
+          newname: juan

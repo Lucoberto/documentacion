@@ -1,0 +1,77 @@
+version: 2.1
+
+# los jobs son tareas que se ejecutan cuando son llamadas
+jobs:
+  # Nombre de la tarea
+  saluda:
+    # El entorno donde se ejecuta
+    docker:
+      # La imagen donde ejecuta los pasos
+      - image: cimg/base:stable
+    # Los pasos que va a ejecutar
+    steps:
+      - run: echo hello
+  # Se pueden defini varias tareas
+  despidete:
+    docker:
+      - image: cimg/base:stable
+    steps:
+      # Se pueden ejecutar varios pasos
+      - run: echo adios
+      - run: echo adios de verdad
+
+# los workflow son espacios donde se ejecutaran los jobs que definamos
+workflows:
+  firstworkflow:
+    jobs:
+      - saluda
+      - despidete
+
+
+# Puedes definir varios workflows
+  secondworkflow:
+    jobs:
+      - saluda
+      - despidete:
+          # Requires fuerza la dependencia del otro en caso de fallo en segundo no se ejecuta
+          requires:
+            - saluda
+
+# Ejecutando solo un workflow
+  thirdworkflow:
+    jobs:
+      - saluda
+
+# Aprobacion manual
+  fourthworkflow:
+    jobs:
+      - saluda
+      # Aprobacion manual
+      - approval:
+          type: approval
+          # Si no se ejecuta saluda correctamente no se permite aprobar
+          requires:
+            - saluda
+      # Se ejecuta cuando la aprobacion se confirme correctamente
+      - despidete:
+          requires:
+            - approval
+
+ # Automatizar despliegue cada cierto tiempo
+  programmedjob:
+    triggers:
+      # Trigger de forma programada
+      - schedule:
+            # Expresion cron esto automatiza un proceso
+            cron: "20 10 * * *"
+            # Filtrar por branches
+            filters:
+              branches:
+                only:
+                  main
+
+    jobs:
+      - saluda
+      - despidete:
+          requires:
+            - saluda

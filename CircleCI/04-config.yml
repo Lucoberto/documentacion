@@ -1,0 +1,27 @@
+version: 2.1
+
+# <!> Es importante el orden de ejecucion <!>
+
+commands:
+  install-cli:
+    steps:
+      - run: echo install cli
+      # Descarga todo el repo donde este
+      # - checkout
+
+jobs:
+  install-dependencies:
+    docker:
+      - image: cimg/base:stable
+    steps:
+      - install-cli
+      # Se puede llamar como step de un comando o de un job
+      - checkout:
+          # Puedes añadir un path donde se descargara tu codigo
+          path: code/
+      - run: ls -lha
+
+workflows:
+  install-workflow:
+    jobs:
+      - install-dependencies

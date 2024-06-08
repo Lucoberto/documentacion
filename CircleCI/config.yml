@@ -1,0 +1,28 @@
+version: 2.1
+
+# Consumir orbs
+
+# Declaracion de los orbs
+orbs:
+  # El orb que vamos a consumir
+  docker: circleci/docker@x.y.z
+
+jobs:
+  install_depends:
+    # El execitor define donde se ejecutan los jobs (docker, VM, etc.)
+    executor:
+      name: docker/docker
+      tag: '3.6'
+    steps:
+      - checkout
+      # Llamada a un comando definido en la config del orb
+      - docker/install-docker-tools
+
+
+workflows:
+  install_docker_tools:
+    jobs:
+      - install_depends:
+          name: install tools
+
+

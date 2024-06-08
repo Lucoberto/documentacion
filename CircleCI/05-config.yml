@@ -1,0 +1,29 @@
+version: 2.1
+
+# Variables de entorno
+
+jobs:
+  saluda:
+    docker:
+      - image: ubuntu:latest
+    steps:
+      - run:
+          command: echo hola $NOMBRE
+      - run:
+          command: echo hola $NOMBREDOS
+          # Variable de entorno a nivel step
+          environment:
+            NOMBREDOS: Jesus
+      # Otra forma de escribir un run
+      - run:
+          command: echo mi id de job es $CIRCLE_WORKFLOW_JOB_ID
+          # Dar un nombre
+          name: imprime el id
+
+workflows:
+  saluda_ahora:
+    jobs:
+      - saluda:
+          name: un_saludo
+          # Obteniendo variables de un contexto
+          context: aws
